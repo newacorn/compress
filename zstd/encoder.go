@@ -459,6 +459,7 @@ func (e *Encoder) Close() error {
 		}
 		_, s.err = s.w.Write(frame)
 	}
+	s.w = nil
 	return s.err
 }
 

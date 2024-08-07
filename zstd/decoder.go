@@ -591,6 +591,7 @@ func (d *Decoder) Close() {
 		d.current.d = nil
 	}
 	d.current.err = ErrDecoderClosed
+	d.syncStream.br.r = nil
 }
 
 // IOReadCloser returns the decoder as an io.ReadCloser for convenience.

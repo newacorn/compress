@@ -7,9 +7,9 @@
 package gzip
 
 import (
-	"bufio"
 	"compress/gzip"
 	"encoding/binary"
+	"github.com/newacorn/bytes-pool/bufio"
 	"hash/crc32"
 	"io"
 	"time"
@@ -115,6 +115,7 @@ func (z *Reader) Reset(r io.Reader) error {
 		if z.br != nil {
 			z.br.Reset(r)
 		} else {
+			//bufio.NewReader()
 			z.br = bufio.NewReader(r)
 		}
 		z.r = z.br
@@ -377,4 +378,14 @@ func (z *Reader) WriteTo(w io.Writer) (int64, error) {
 // Close closes the Reader. It does not close the underlying io.Reader.
 // In order for the GZIP checksum to be verified, the reader must be
 // fully consumed until the io.EOF.
-func (z *Reader) Close() error { return z.decompressor.Close() }
+func (z *Reader) Close() error {
+	// for pool release some resource
+	// before put pool should call
+	z.r = nil // z.r不可复用
+	if z.br != nil {
+		z.br.RecycleItems() // z.br 在每次reset时，z.br不一定能用的到。
+		*z.br = bufio.Reader{}
+	}
+	r := z.decompressor.Close()
+	return r
+}

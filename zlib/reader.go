@@ -125,9 +125,11 @@ func (z *reader) Read(p []byte) (int, error) {
 // fully consumed until the [io.EOF].
 func (z *reader) Close() error {
 	if z.err != nil && z.err != io.EOF {
+		z.r = nil
 		return z.err
 	}
 	z.err = z.decompressor.Close()
+	z.r = nil
 	return z.err
 }
 
