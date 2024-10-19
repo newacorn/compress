@@ -9,7 +9,7 @@ package gzip
 import (
 	"compress/gzip"
 	"encoding/binary"
-	"github.com/newacorn/bytes-pool/bufio"
+	"github.com/newacorn/goutils/bufio"
 	"hash/crc32"
 	"io"
 	"time"
