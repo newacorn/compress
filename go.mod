@@ -1,4 +1,4 @@
-module github.com/klauspost/compress
+module github.com/newacorn/compress
 
 go 1.20
 
